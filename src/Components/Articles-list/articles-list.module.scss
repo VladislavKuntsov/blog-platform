@@ -1,0 +1,38 @@
+.articlesPagination {
+    margin: 27px  auto;
+    text-align: center;
+
+    & li {
+        border-radius: 4px;
+        outline: none; 
+        background-color: #E5E5E5;
+        border-color: #E5E5E5;
+    }
+
+    & button {
+        border: none !important; 
+        outline: none !important;
+        background-color: #E5E5E5 !important;
+    };
+
+    & li.ant-pagination-item-active {
+        color: white;
+        background: #1890FF !important;  
+    }
+
+    & li:hover {
+        background-color: #1890FF;  
+        
+        & > a {
+            color: white;
+        }
+    }
+}
+
+.spinnerContainer > div {
+   align-items: center;
+   width: 100%;
+   margin: 200px auto;
+}
+
+ 

@@ -1,0 +1,169 @@
+.articlesContainer {
+    position: relative;
+    margin: 26px auto 0px auto ;
+    padding-bottom: 1px;
+    width: 941px;
+    min-height: 140px; 
+    background-color: #FFFFFF;
+    border-radius: 10px;
+    box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.5);
+    box-sizing: border-box;
+
+    & > div{
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+    }
+
+    .articlesButton {
+        position: absolute;
+        top: 93px;
+        right: 13.77px;
+    }
+
+    .headers {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        padding: 15px 13px 6px 19px;
+
+        .title {
+            margin: 0;
+            color: #1890FF;
+            font-size: 20px;
+            line-height: 28px;
+            cursor: pointer;
+
+            &:hover {
+                color: #1160aa;
+            }
+        }
+
+        .reactionsLikes {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+
+            .reactionsLikes__items {
+                margin-left: 13px;
+                text-align: center;
+
+                & img {
+                    display: block;
+                }
+            }
+
+            .reactionsLikes__count {
+                font-size: 12px;
+                line-height: 22px;
+                color: rgba(0, 0, 0, 0.75);
+                margin-left: 5px;
+                align-items: center;
+            }
+        }
+    }
+
+    .profileInformation {
+/*         position: absolute;
+        top: 15px;
+        right: 14px; */
+        margin-right: 14px;
+        margin-top: 15px;
+        display: flex;
+        flex-direction: row;
+
+        .profileInformation__dataPerson {
+            text-align: center;
+
+            .fullName {
+                font-size: 18px;
+                line-height: 28px;
+                color: rgba(0, 0, 0, 0.85);
+            }
+
+            .postDate {
+                font-size: 12px;
+                line-height: 22px;
+                color: rgba(0, 0, 0, 0.5);
+            }
+        }
+
+        .profileInformation__logo {
+            margin-left: 12px;
+
+            & > img {
+                width: 46px;
+                height: 46px;
+                border-radius: 50%;
+            }
+        }
+    }
+
+    .someTags {
+        display: flex;
+        flex-direction: row;
+        margin-left: 11px;
+
+        & > div {
+            border: 1px solid rgba(0, 0, 0, 0.5);
+            border-radius: 2px;
+            margin-left: 8px;
+            padding: 2px 6px 3px 5px;
+        }
+    }
+
+    .articlesText {
+        margin: 4px 0 0px 19px ;
+        width: 682px;
+        font-size: 12px;
+        line-height: 22px;
+        color: rgba(0, 0, 0, 0.75);
+    }
+
+    .articlesBody {
+        margin: 25px 0 25px 19px ;
+        font-size: 12px;
+        line-height: 22px;
+        color: rgba(0, 0, 0, 0.75);
+    }
+
+}
+
+.articlesPagination {
+    margin: 27px  auto;
+    text-align: center;
+
+    & li {
+        /* border: none;  */
+        border-radius: 4px;
+        outline: none; 
+        background-color: #E5E5E5;
+        border-color: #E5E5E5;
+    }
+
+    & button {
+        border: none !important; 
+        outline: none !important;
+        background-color: #E5E5E5 !important;
+    };
+
+    & li.ant-pagination-item-active {
+        color: white;
+        background: #1890FF !important;  
+    }
+
+    & li:hover {
+        background-color: #1890FF;  
+        
+        & > a {
+            color: white;
+        }
+    }
+}
+
+.spinnerContainer > div {
+   align-items: center;
+   width: 100%;
+   margin: 200px auto;
+}
+

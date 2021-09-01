@@ -1,0 +1,132 @@
+.header {
+    height: 80px;
+    display: flex;
+    flex-direction: row;
+    background: #FFFFFF;
+    box-sizing: border-box;
+    align-items: center;
+    font-family: "inter";
+
+    .header_blogName  {
+        font-size: 18px;
+        line-height: 28px;
+        margin: 9px 0 15px 22px;
+        flex-grow: 1;
+
+        span:hover {
+            color: #52C41A;
+        }
+    }
+
+    .header_signIn {
+        cursor: pointer;
+        width: 84px;
+        height: 34px;    
+       
+        & span {
+            display: block;
+            font-size: 18px;
+            line-height: 34px;
+            text-align: center;
+            margin: auto;    
+        }
+
+        &:hover {
+            width: inherit + 2px;
+            height: 36px;  
+            border: 1px solid rgb(172, 170, 170);
+            text-align: center;   
+            border-radius: 5px; 
+            box-shadow: 0 0 5px 2px rgba(172, 170, 170, 0.5);
+        }
+    }
+
+    .header_signUp {
+        border: 1px solid #52C41A;
+        border-radius: 5px;
+        width: 109px;
+        margin: 16px 22px 13px 19px;
+        cursor: pointer;
+        
+        & span {
+            display: block;
+            width: 72.67px;
+            font-size: 18px;
+            line-height: 34px;
+            color: #52C41A;;
+            margin: 6px 18.17px 10px 18.17px ;
+            text-align: center;     
+        }
+
+        &:hover {
+            box-shadow: 0 0 5px 2px rgba(82, 196, 26, 0.5);
+        }
+    }
+
+    .header_logOut {
+        border: 1px solid rgba(0, 0, 0, 0.75);
+        border-radius: 5px;
+        width: 109px;
+        margin: 16px 22px 13px 19px;
+        cursor: pointer;
+        
+        & span {
+            display: block;
+            width: 72.67px;
+            font-size: 18px;
+            line-height: 34px;
+            color: #000000;
+            margin: 6px 18.17px 10px 18.17px ;
+            text-align: center;     
+        }
+
+        &:hover {
+            box-shadow: 0 0 5px 2px rgba(0, 0, 0, 0.5);
+        }
+    }
+    
+    .header_authorized {
+        display: flex;
+        flex-direction: row;
+        margin-left: 27px;
+        align-items: center;
+        
+        img { /* FUCK YOU */
+            border: 1px dashed rgba(172, 170, 170, 0.5);
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            margin-left: 13px;
+        }
+
+        & :first-child {
+            display: block;
+            font-size: 18px;
+            line-height: 28px;
+            color: rgba(0, 0, 0, 0.85);
+        }
+    }
+
+    .header_createArticle {
+        border: 1px solid #52C41A;
+        border-radius: 5px;
+        align-items: center;
+        cursor: pointer;
+
+        & span {
+            display: block;
+            font-size: 14px;
+            line-height: 22px;
+            align-items: center;
+            color: #52C41A;
+            padding: 6px 10px 5px 10px;
+        }
+
+        &:hover {
+            box-shadow: 0 0 5px 2px rgba(82, 196, 26, 0.5);
+        }
+    }
+
+
+
+}
