@@ -183,7 +183,10 @@ NewArticle.propTypes = {
         push: PropTypes.objectOf.isRequired,
         location: PropTypes.objectOf.isRequired,
     }).isRequired,
-    articlesUser: PropTypes.objectOf(PropTypes.object).isRequired,
+    articlesUser: PropTypes.shape({
+        articles: PropTypes.arrayOf(PropTypes.object).isRequired,
+        articlesCount: PropTypes.number.isRequired,
+    }).isRequired,
     setArticlesUser: PropTypes.func.isRequired,
     setIsLoading: PropTypes.func.isRequired,
     fullArticle: PropTypes.shape({
@@ -194,7 +197,7 @@ NewArticle.propTypes = {
             title: PropTypes.string.isRequired,
             tagList: PropTypes.arrayOf(PropTypes.string).isRequired
         }).isRequired,
-        articlesCount: PropTypes.number.isRequired
+        articlesCount: PropTypes.number
       }),
 }
 

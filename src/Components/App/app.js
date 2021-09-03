@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { BrowserRouter as Router, Route} from 'react-router-dom';
-import { connect } from 'react-redux';
 import {bindActionCreators} from 'redux';
+import { connect } from 'react-redux';
 import * as actions from '../../Store/actions';
 import PrivateRoute from '../Route/Private-route/private-route';
 
@@ -22,15 +22,22 @@ const realWorldDBService = new Services;
 const App = ({setArticles, setArticlesUser, setIsLoading, currentPage, isLogin}) =>  {
 
     useEffect(() => {
+
         realWorldDBService.getArticles(currentPage * 20).then(body => {
             setArticles(body);
-            setIsLoading(false);
+            if(isLogin) {
+                realWorldDBService.getArticlesUser(isLogin.username).then(bodyy => {
+                    setArticlesUser(bodyy);
+                    setIsLoading(false);
+                })
+            }  else setIsLoading(false);
         })     
 
         if(isLogin) {
-            realWorldDBService.getArticlesUser(isLogin.username).then(body => {
-                setArticlesUser(body);
-               /* setIsLoading(false); */
+            setIsLoading(true);
+            realWorldDBService.getArticlesUser(isLogin.username).then(bodyy => {
+                setArticlesUser(bodyy);
+                setIsLoading(false);
             })
         }
         
@@ -58,29 +65,29 @@ App.defaultProps = {
 }
 
 App.propTypes = {
+    setIsLoading: PropTypes.func.isRequired,
     setArticles: PropTypes.func.isRequired,
     setArticlesUser: PropTypes.func.isRequired,
-    setIsLoading: PropTypes.func.isRequired,
     currentPage: PropTypes.number.isRequired,
     isLogin: PropTypes.shape({
         username: PropTypes.string,
-    })
-}
-
-const mapDispatchToProps = (dispatch) => {
-    const {setArticles, setArticlesUser, setIsLoading} = bindActionCreators(actions, dispatch);
-
-    return {
-        setArticles: (payload) => setArticles(payload),
-        setArticlesUser: (payload) => setArticlesUser(payload),
-        setIsLoading: (payload) => setIsLoading(payload),
-    }
+    }),
 }
 
 const mapStateToProps = (state) => ({
     currentPage: state.currentPage,
     isLogin: state.isLogin,
 }) 
+
+const mapDispatchToProps = (dispatch) => {
+    const {setArticles, setIsLoading, setArticlesUser} = bindActionCreators(actions, dispatch);
+
+    return {
+        setIsLoading: (payload) => setIsLoading(payload),
+        setArticles: (payload) => setArticles(payload),
+        setArticlesUser: (payload) => setArticlesUser(payload),
+    }
+}
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);
 

@@ -2,21 +2,13 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classesModal from './modal.module.scss';
 
-const Modal = ({active, setActive, children}) => {
-
-    console.log(typeof children, children)
-
-    return (
+const Modal = ({active, setActive, children}) => (
               <div className={active ? `${classesModal.modal} ${classesModal.active}` : classesModal.modal} onClick={() => setActive(false)} role="presentation">
             <div className={active ? `${classesModal.modal__content} ${classesModal.active}` : classesModal.modal__content} onClick={(event) => event.stopPropagation()} role="presentation">
             {children}
             </div>
         </div>  
-    )
-
-}
-
-    
+    )  
 
 Modal.defaultProps = {
     children: []

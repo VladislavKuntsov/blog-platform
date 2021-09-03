@@ -16,20 +16,23 @@ const realWorldDBService = new Services;
 
 const ArticleItem = ({articleData, setIsLoading, setFullArticle, history, body, button}) => {
 
+    console.log(typeof button)
+
     const {title, favoritesCount, author, updatedAt, tagList, description} = articleData;
 
-    const сhangingDateFormat = (data) =>
-        new Date(data).toLocaleString('en-us', { month: 'long', year: 'numeric', day: 'numeric' });
+    const сhangingDateFormat = (data) => new Date(data).toLocaleString('en-us', { month: 'long', year: 'numeric', day: 'numeric' });
 
-        const onClickArticle = () => {
-            setIsLoading(true)
+    const onClickArticle = () => {
+        if(!body) {
+            setIsLoading(true);
             realWorldDBService.getFullArticle(articleData.slug).then( (article) => {
                 localStorage.setItem("fullArticle", JSON.stringify(article));
                 setFullArticle();
                 setIsLoading(false);
                 history.push(`/articles/${articleData.slug}`);
-            }) 
+            })     
         }
+    }
 
     return (
         <div className={classesArticlesItem.articlesContainer}>
@@ -89,7 +92,7 @@ const Tags = ({data}) => (
 
 ArticleItem.defaultProps = {
     body: "",
-    button: {},
+    button: null,
 }
 
 ArticleItem.propTypes = {
@@ -112,7 +115,8 @@ ArticleItem.propTypes = {
     }).isRequired,
     body: PropTypes.string,
     button: PropTypes.shape({
-        $$typeof: PropTypes.symbol,
+        $$typeof: PropTypes.objectOf.isRequired,
+        type: PropTypes.string.isRequired
     }),
     setFullArticle: PropTypes.func.isRequired,
     setIsLoading: PropTypes.func.isRequired,

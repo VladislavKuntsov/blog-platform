@@ -10,7 +10,9 @@ import ArticleItem from "../Article-item/article-item";
 import classesArticlesList from './articles-list.module.scss';
 
 
-const ArticlesList = ({articles, isLoading, currentPage, setCurrentPage, setIsLoading}) =>   {
+const ArticlesList = ({articles,  isLoading, currentPage, setCurrentPage, setIsLoading, articlesUser, isLogin}) =>   {
+
+    const newArticles = articlesUser &&  !isLoading && isLogin ? articlesUser : articles
 
     const сhangePageNumber = (nextPage) => {
         window.scroll(0, 0);
@@ -24,7 +26,7 @@ const ArticlesList = ({articles, isLoading, currentPage, setCurrentPage, setIsLo
         </div> : 
         null;
 
-    const articlesList = !isLoading && articles ? articles.articles.map((item) => (
+    const articlesList = !isLoading /* && articles */ ? newArticles.articles.map((item) => (
         <div key={uuidv4()}>
             <ArticleItem articleData={item}/>    
         </div>)) : 
@@ -35,7 +37,7 @@ const ArticlesList = ({articles, isLoading, currentPage, setCurrentPage, setIsLo
             <Pagin
                 defaultCurrent={1}
                 current={currentPage}
-                total={articles.articlesCount} 
+                total={newArticles.articlesCount} 
                 showSizeChanger={false}
                 pageSize={20}
                 showQuickJumper={false}
@@ -56,6 +58,7 @@ const ArticlesList = ({articles, isLoading, currentPage, setCurrentPage, setIsLo
 ArticlesList.defaultProps = {
     articlesUser: {},
     articles: {},
+    isLogin: {},
 }
 
 ArticlesList.propTypes = {
@@ -70,14 +73,18 @@ ArticlesList.propTypes = {
     articlesUser: PropTypes.shape({
         articles: PropTypes.arrayOf(PropTypes.object).isRequired,
         articlesCount: PropTypes.number.isRequired
-      }),
+    }),
+    isLogin: PropTypes.shape({
+        username: PropTypes.string,
+    }),
 }
 
-const mapStateProps = (state) => ({
+const mapStateToProps = (state) => ({
     isLoading: state.isLoading,
     currentPage: state.currentPage,
     articles: state.articles,
     articlesUser: state.articlesUser,
+    isLogin: state.isLogin,
 })
 
 const mapDispatchToProps = (dispatch) => {
@@ -89,4 +96,4 @@ const mapDispatchToProps = (dispatch) => {
     }
 }
 
-export default connect(mapStateProps, mapDispatchToProps)(ArticlesList);
+export default connect(mapStateToProps, mapDispatchToProps)(ArticlesList);
