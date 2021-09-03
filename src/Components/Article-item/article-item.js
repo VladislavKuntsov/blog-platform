@@ -16,8 +16,6 @@ const realWorldDBService = new Services;
 
 const ArticleItem = ({articleData, setIsLoading, setFullArticle, history, body, button}) => {
 
-    console.log(typeof button)
-
     const {title, favoritesCount, author, updatedAt, tagList, description} = articleData;
 
     const сhangingDateFormat = (data) => new Date(data).toLocaleString('en-us', { month: 'long', year: 'numeric', day: 'numeric' });
