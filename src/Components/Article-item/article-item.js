@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { v4 as uuidv4 } from 'uuid';
+import ReactMarkdown from 'react-markdown'
 import { withRouter} from 'react-router-dom';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux'; 
@@ -71,10 +72,12 @@ const ArticleItem = ({articleData, setIsLoading, setFullArticle, history, body, 
                 </div>                
             </div>
             <div className={classesArticlesItem.articlesBody}>
-                {body}
+                <ReactMarkdown >
+                    {body}
+                </ReactMarkdown >
             </div>
             <div className={classesArticlesItem.articlesButton}>
-                {button}     
+                    {button}  
             </div>
         </div>
     )

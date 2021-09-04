@@ -12,7 +12,7 @@ import Services from '../../Services/services';
 
 const realWorldDBService = new Services;
 
-const NewArticle = ({fullArticle,  history, setArticlesUser, setIsLoading, isLogin}) => {
+const NewArticle = ({fullArticle,  history, setIsLoading, isLogin}) => {
 
     const arr = fullArticle ? fullArticle.article.tagList.map((item) => {
         const obj = {id: nanoid(3), tag: item}
@@ -78,26 +78,16 @@ const NewArticle = ({fullArticle,  history, setArticlesUser, setIsLoading, isLog
             }
         }
 
-        if(fullArticle) {
+        if(fullArticle && history.location.pathname !== "/new-article") {
             realWorldDBService.updateArticle(token, userDataNewArticle, fullArticle.article.slug).then( () => {
                 setIsLoading(true);
-
-                realWorldDBService.getArticlesUser(isLogin.username).then(bodyy => {
-                    setArticlesUser(bodyy);
-                    setIsLoading(false);   
-                })
-
                 history.push(`/articles`);
             }) 
-        } else {
+        } 
+        
+        if(history.location.pathname === "/new-article") {
             realWorldDBService.postNewArticles(userDataNewArticle, token).then( () => {
                 setIsLoading(true);
-                
-                realWorldDBService.getArticlesUser(isLogin.username).then(bodyy => {
-                    setArticlesUser(bodyy);
-                    setIsLoading(false);   
-                })
-
                 history.push(`/articles`);
             })
         }
@@ -183,11 +173,6 @@ NewArticle.propTypes = {
         push: PropTypes.objectOf.isRequired,
         location: PropTypes.objectOf.isRequired,
     }).isRequired,
-    articlesUser: PropTypes.shape({
-        articles: PropTypes.arrayOf(PropTypes.object).isRequired,
-        articlesCount: PropTypes.number.isRequired,
-    }).isRequired,
-    setArticlesUser: PropTypes.func.isRequired,
     setIsLoading: PropTypes.func.isRequired,
     fullArticle: PropTypes.shape({
         article: PropTypes.shape({
@@ -208,10 +193,10 @@ const mapStateToProps = (state) => ({
 })
 
 const mapDispatchToProps = (dispatch) => {
-    const {setArticlesUser, setIsLoading} = bindActionCreators(actions, dispatch);
+    const {/* setArticlesUser, */ setIsLoading} = bindActionCreators(actions, dispatch);
 
     return {
-        setArticlesUser: (payload) => setArticlesUser(payload),
+        /* setArticlesUser: (payload) => setArticlesUser(payload), */
         setIsLoading: (payload) => setIsLoading(payload),
     }
 }

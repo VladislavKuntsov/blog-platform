@@ -19,29 +19,14 @@ import Services from '../../Services/services';
 const realWorldDBService = new Services;
 
 
-const App = ({setArticles, setArticlesUser, setIsLoading, currentPage, isLogin}) =>  {
+const App = ({setArticles, setArticlesUser, setIsLoading, currentPage, isLogin, isLoading}) =>  {
 
     useEffect(() => {
-
-        realWorldDBService.getArticles(currentPage * 20).then(body => {
+        realWorldDBService.getArticles(currentPage * 20 - 20).then(body => {
             setArticles(body);
-            if(isLogin) {
-                realWorldDBService.getArticlesUser(isLogin.username).then(bodyy => {
-                    setArticlesUser(bodyy);
-                    setIsLoading(false);
-                })
-            }  else setIsLoading(false);
+            setIsLoading(false); 
         })     
-
-        if(isLogin) {
-            setIsLoading(true);
-            realWorldDBService.getArticlesUser(isLogin.username).then(bodyy => {
-                setArticlesUser(bodyy);
-                setIsLoading(false);
-            })
-        }
-        
-    }, [setArticles, setArticlesUser, setIsLoading, currentPage, isLogin]);
+    }, [setArticles, setArticlesUser, setIsLoading, currentPage, isLogin, isLoading]);
 
 
     return (
@@ -65,6 +50,7 @@ App.defaultProps = {
 }
 
 App.propTypes = {
+    isLoading: PropTypes.bool.isRequired,
     setIsLoading: PropTypes.func.isRequired,
     setArticles: PropTypes.func.isRequired,
     setArticlesUser: PropTypes.func.isRequired,
@@ -77,6 +63,7 @@ App.propTypes = {
 const mapStateToProps = (state) => ({
     currentPage: state.currentPage,
     isLogin: state.isLogin,
+    isLoading: state.isLoading,
 }) 
 
 const mapDispatchToProps = (dispatch) => {

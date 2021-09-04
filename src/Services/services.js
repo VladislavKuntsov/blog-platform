@@ -16,7 +16,7 @@ export default class realWorldDBService extends Component {
     return body;
   }
   
-  getArticles( offset ) {
+  getArticles(offset) {
     return this.getResourse(`${this.API_BASE}articles?offset=${offset}`);
   }
 

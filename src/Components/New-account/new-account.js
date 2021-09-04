@@ -1,14 +1,16 @@
 
 import React/* , {useState} */ from 'react';
+import PropTypes from 'prop-types';
 import {useForm} from "react-hook-form";
-import  {Link} from "react-router-dom"
+
+import  {Link, withRouter} from "react-router-dom";
 import classesNewAccount from './new-account.module.scss';
 
 import Services from '../../Services/services';
 
 const realWorldDBService = new Services;
 
-const NewAccount = () => {
+const NewAccount = ({history}) => {
 
     const { register, handleSubmit, watch, formState: { errors }} = useForm();
 
@@ -23,7 +25,7 @@ const NewAccount = () => {
                     };
                     delete userDataRegistration.user["repeat-password"];
                     realWorldDBService.postNewAccoun(userDataRegistration);
-
+                    history.push("/sign-in")
                 })}
             >
                 <label className={classesNewAccount["input-field"]}>
@@ -107,4 +109,19 @@ const NewAccount = () => {
     )
 }
 
-export default NewAccount;
+NewAccount.defaultProps = {
+    history: {},
+}
+
+
+NewAccount.propTypes = {
+    history: PropTypes.shape({
+        length: PropTypes.number.isRequired,
+        push: PropTypes.objectOf.isRequired,
+        location: PropTypes.shape({
+            pathname: PropTypes.string
+            })
+        }),
+}
+
+export default withRouter(NewAccount);

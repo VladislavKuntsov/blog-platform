@@ -10,9 +10,7 @@ import ArticleItem from "../Article-item/article-item";
 import classesArticlesList from './articles-list.module.scss';
 
 
-const ArticlesList = ({articles,  isLoading, currentPage, setCurrentPage, setIsLoading, articlesUser, isLogin}) =>   {
-
-    const newArticles = articlesUser &&  !isLoading && isLogin ? articlesUser : articles
+const ArticlesList = ({articles,  isLoading, currentPage, setCurrentPage, setIsLoading}) =>   {
 
     const сhangePageNumber = (nextPage) => {
         window.scroll(0, 0);
@@ -26,7 +24,7 @@ const ArticlesList = ({articles,  isLoading, currentPage, setCurrentPage, setIsL
         </div> : 
         null;
 
-    const articlesList = !isLoading /* && articles */ ? newArticles.articles.map((item) => (
+    const articlesList = !isLoading ? articles.articles.map((item) => (
         <div key={uuidv4()}>
             <ArticleItem articleData={item}/>    
         </div>)) : 
@@ -37,7 +35,7 @@ const ArticlesList = ({articles,  isLoading, currentPage, setCurrentPage, setIsL
             <Pagin
                 defaultCurrent={1}
                 current={currentPage}
-                total={newArticles.articlesCount} 
+                total={articles.articlesCount} 
                 showSizeChanger={false}
                 pageSize={20}
                 showQuickJumper={false}
@@ -56,9 +54,8 @@ const ArticlesList = ({articles,  isLoading, currentPage, setCurrentPage, setIsL
 }
 
 ArticlesList.defaultProps = {
-    articlesUser: {},
     articles: {},
-    isLogin: {},
+
 }
 
 ArticlesList.propTypes = {
@@ -70,13 +67,6 @@ ArticlesList.propTypes = {
         articles: PropTypes.arrayOf(PropTypes.object).isRequired,
         articlesCount: PropTypes.number.isRequired
       }),
-    articlesUser: PropTypes.shape({
-        articles: PropTypes.arrayOf(PropTypes.object).isRequired,
-        articlesCount: PropTypes.number.isRequired
-    }),
-    isLogin: PropTypes.shape({
-        username: PropTypes.string,
-    }),
 }
 
 const mapStateToProps = (state) => ({

@@ -12,7 +12,7 @@ import classesEditProfile from './edit-profile.module.scss';
 const realWorldDBService = new Services;
 
 
-const SignIn = ({dataAuthorizationUser, setDataAuthorizationUser, history}) => {
+const SignIn = ({isLogin, setIsLogin, history, setIsLoading}) => {
 
     const {register, handleSubmit, formState: {errors}} = useForm();
 
@@ -30,11 +30,13 @@ const SignIn = ({dataAuthorizationUser, setDataAuthorizationUser, history}) => {
     }
 
     const onEditProfile = (data) => {
-        const {token} = dataAuthorizationUser;
+        const {token} = isLogin;
         const userDataEditProfile = {user: data};
+        setIsLoading(true);
 
         realWorldDBService.postEditProfile(userDataEditProfile, token).then(body => {
-            setDataAuthorizationUser(body.user)    
+            localStorage.setItem("isLogin", JSON.stringify(body.user));
+            setIsLogin(); 
             history.push(`/articles`)
         })
     }
@@ -50,7 +52,7 @@ const SignIn = ({dataAuthorizationUser, setDataAuthorizationUser, history}) => {
                         type="text" 
                         placeholder="Username" 
                         {...register("username", {
-                            value: dataAuthorizationUser ? dataAuthorizationUser.username : "",
+                            value: isLogin ? isLogin.username : "",
                             required: "Your name needs be less than 3 characters",
                             minLength: {value: 3, message: "Your name needs be less than 3 characters"},
                             maxLength: {value: 20, message: "Your name needs be no more than 20 characters"},
@@ -65,7 +67,7 @@ const SignIn = ({dataAuthorizationUser, setDataAuthorizationUser, history}) => {
                         type="email" 
                         placeholder="Email address"
                         {...register("email", {
-                            value: dataAuthorizationUser ? dataAuthorizationUser.email : "",
+                            value: isLogin ? isLogin.email : "",
                             required: "Please enter a valid email address",
                             pattern: {
                                 value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
@@ -115,29 +117,34 @@ const SignIn = ({dataAuthorizationUser, setDataAuthorizationUser, history}) => {
 }
 
 SignIn.defaultProps = {
-    dataAuthorizationUser: null,
+    isLogin: null,
     history: {},
 }
 
 SignIn.propTypes = {
-    dataAuthorizationUser:  PropTypes.shape({
+    isLogin:  PropTypes.shape({
         token: PropTypes.string.isRequired,
         username: PropTypes.string,
         email: PropTypes.string,
     }),
     setDataAuthorizationUser: PropTypes.func.isRequired,
     history: PropTypes.objectOf(PropTypes.object),
+    setIsLoading: PropTypes.func.isRequired,
+    setIsLogin: PropTypes.func.isRequired,
 }
 
 const mapStateToProps = (state) => ({
     dataAuthorizationUser: state.dataAuthorizationUser,
+    isLogin: state.isLogin,
 })
 
 const mapDispatchToProps = (dispatch) => {
-    const {setDataAuthorizationUser} = bindActionCreators(actions, dispatch);
+    const {setDataAuthorizationUser, setIsLoading, setIsLogin} = bindActionCreators(actions, dispatch);
 
     return {
-        setDataAuthorizationUser: (payload) => setDataAuthorizationUser(payload)
+        setDataAuthorizationUser: (payload) => setDataAuthorizationUser(payload),
+        setIsLoading: (payload) => setIsLoading(payload),
+        setIsLogin: () => setIsLogin(),
     }
 }
 
