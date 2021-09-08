@@ -9,7 +9,7 @@ import defaultLogoUser from '../../Images/logoProfile.svg';
 
 import classesHeader from './header.module.scss';
 
-const Header = ({setIsLogin, isLogin}) => {
+const Header = ({setIsLogin, isLogin, setIsLoading}) => {
 
     const checkingUserAuthorization = isLogin ? (
         <>
@@ -17,17 +17,19 @@ const Header = ({setIsLogin, isLogin}) => {
                 <Link to="/new-article"><span>Create article</span></Link>
             </div>
             <div className={classesHeader.header_authorized}>
+
                 <div>
-                    <Link to="/edit-profile"><span>{isLogin.username}</span></Link>    
+                    <Link to="/profile"><span>{isLogin.username}</span></Link>    
                 </div>
                 <div>
-                    <Link to="/edit-profile"><img src={!isLogin.image  ? defaultLogoUser : isLogin.image} alt='logo User' /></Link>    
+                    <Link to="/profile"><img src={!isLogin.image  ? defaultLogoUser : isLogin.image} alt='logo User' /></Link>    
                 </div>
+                
             </div>    
             <div className={classesHeader.header_logOut}>
                 <span 
                     onClick={() => {
-                        localStorage.setItem("isLogin", null);
+                        localStorage.clear();
                         setIsLogin();
                     }} 
                     role="presentation"
@@ -43,7 +45,7 @@ const Header = ({setIsLogin, isLogin}) => {
                     <span>Sign In</span>
                 </div>  
             </Link>
-            <Link to="/new-account">
+            <Link to="/sign-up">
                 <div className={classesHeader.header_signUp}>
                     <span>Sign Up</span>
                 </div>
@@ -52,12 +54,15 @@ const Header = ({setIsLogin, isLogin}) => {
     )
 
     return (
-        <div className={classesHeader.header}>
-            <div className={classesHeader.header_blogName}>
-                <Link to="/articles"><span>Realworld Blog</span></Link>
+        <div className={classesHeader["wrapper-header"]}>
+            <div className={classesHeader.header}>
+                <div className={classesHeader.header_blogName}>
+                    <Link to="/articles"><span onClick={() => setIsLoading(true)} role="presentation">Realworld Blog</span></Link>
+                </div>
+                {checkingUserAuthorization}
             </div>
-            {checkingUserAuthorization}
         </div>
+        
     )    
 }
 
@@ -70,7 +75,8 @@ Header.propTypes = {
     isLogin: PropTypes.shape({
         username: PropTypes.string,
         image: PropTypes.string
-    })
+    }),
+    setIsLoading: PropTypes.func.isRequired, 
 }
 
 const mapStateToProps = (state) => ({
@@ -78,10 +84,11 @@ const mapStateToProps = (state) => ({
 })
 
 const mapDispatchToProps = (dispatch) => {
-    const {setIsLogin} = bindActionCreators(actions, dispatch);
+    const {setIsLogin, setIsLoading} = bindActionCreators(actions, dispatch);
 
     return {
         setIsLogin: () => setIsLogin(),
+        setIsLoading: (payload) => setIsLoading(payload),
     }
 }
 

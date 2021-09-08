@@ -1,99 +1,126 @@
 .bl-sign-in {
-    font-family: "Inter";
-    position: relative;
-    margin: 59px auto;
-    width: 384px;
-    text-align: center;
-    background: #ffffff;
-    border: 1px solid #d9d9d9;
-    box-sizing: border-box;
-    box-shadow: 0px 22px 106px rgba(0, 0, 0, 0.07), 0px 9.19107px 44.2843px rgba(0, 0, 0, 0.0503198),
-      0px 4.91399px 23.6765px rgba(0, 0, 0, 0.0417275), 0px 2.75474px 13.2728px rgba(0, 0, 0, 0.035),
-      0px 1.46302px 7.04911px rgba(0, 0, 0, 0.0282725), 0px 0.608796px 2.93329px rgba(0, 0, 0, 0.0196802);
-    border-radius: 6px;
-  
-    & label {
-      display: block;
-    }
-  
-    .title {
-      display: block;
-      margin: 48px 0 21px 0;
-    }
-  
-    .form {
+  font-family: 'Inter';
+  position: relative;
+  margin: 59px auto;
+  width: 384px;
+  text-align: center;
+  background: #ffffff;
+  border: 1px solid #d9d9d9;
+  box-sizing: border-box;
+  box-shadow: 0px 22px 106px rgba(0, 0, 0, 0.07), 0px 9.19107px 44.2843px rgba(0, 0, 0, 0.0503198),
+    0px 4.91399px 23.6765px rgba(0, 0, 0, 0.0417275), 0px 2.75474px 13.2728px rgba(0, 0, 0, 0.035),
+    0px 1.46302px 7.04911px rgba(0, 0, 0, 0.0282725), 0px 0.608796px 2.93329px rgba(0, 0, 0, 0.0196802);
+  border-radius: 6px;
 
-      input:-webkit-autofill {
-        box-shadow: 0 0 0 30px white inset !important;
-      }
-  
-      .input-field {
-        margin-bottom: 12px;
-        font-family: inherit;
-        color: #262626;
-        box-sizing: border-box;
-      }
-  
-      .input-field > div {
-        text-align: start;
-        font-size: 14px;
-        line-height: 22px;
-        margin-bottom: 2px;
-        margin-left: 32px;
-      }
-  
-      .input-field > input {
-        outline: none;
-        background-image: none !important;
-        border: 1px solid #d9d9d9;
-        background-color: white !important;
-        box-sizing: border-box;
-        text-indent: 10px;
-        border-radius: 4px;
-        width: 320px;
-        height: 40px;
-      }
-  
-      .warning-text {
-        margin: 2px 0px;
-        line-height: 22px;
-        font-size: 14px !important;
-        color: #f5222d;
-        letter-spacing: -0.5px;
-      }
-  
-      .input-field .warning-border {
-        border: 1px solid #f5222d;
-      }
+  & label {
+    display: block;
+  }
+
+  .title {
+    display: block;
+    margin: 48px 0 21px 0;
+  }
+
+  .form {
+    input:-webkit-autofill {
+      box-shadow: 0 0 0 30px white inset !important;
     }
-  
-    .input-create {
-      margin: 21px auto 8px auto;
-  
-      & > input {
-        width: 319px;
-        height: 40px;
-        background: #1890ff;
-        border-radius: 4px;
-        border: #1890ff;
-        font-size: 16px;
-        line-height: 24px;
-        color: white;
-        cursor: pointer;
-      }
+
+    .input-field {
+      margin-bottom: 12px;
+      font-family: inherit;
+      color: #262626;
+      box-sizing: border-box;
     }
-  
-    .meta-sign-up {
-      font-size: 12px;
-      line-height: 20px;
-      color: #8c8c8c;
-      margin-bottom: 48px;
-  
-      & > span {
-        display: inline-block;
-        color: #1890ff;
-        cursor: pointer;
-      }
+
+    .input-field > div {
+      text-align: start;
+      font-size: 14px;
+      line-height: 22px;
+      margin-bottom: 2px;
+      margin-left: 32px;
+    }
+
+    .input-field > input {
+      outline: none;
+      background-image: none !important;
+      border: 1px solid #d9d9d9;
+      background-color: white !important;
+      box-sizing: border-box;
+      text-indent: 10px;
+      border-radius: 4px;
+      width: 320px;
+      height: 40px;
+    }
+
+    .warning-text {
+      margin: 2px 0px;
+      line-height: 22px;
+      font-size: 14px !important;
+      color: #f5222d;
+      letter-spacing: -0.5px;
+    }
+
+    .input-field .warning-border {
+      border: 1px solid #f5222d;
     }
   }
-  
+
+  .input-create {
+    margin: 21px auto 8px auto;
+
+    & > input {
+      width: 319px;
+      height: 40px;
+      background: #1890ff;
+      border-radius: 4px;
+      border: #1890ff;
+      font-size: 16px;
+      line-height: 24px;
+      color: white;
+      cursor: pointer;
+    }
+  }
+
+  .meta-sign-up {
+    font-size: 12px;
+    line-height: 20px;
+    color: #8c8c8c;
+    margin-bottom: 48px;
+
+    & > span {
+      display: inline-block;
+      color: #1890ff;
+      cursor: pointer;
+    }
+  }
+}
+
+.errorInvalidPassword {
+  display: flex;
+  flex-direction: column;
+  margin: 0 32px 21px 32px;
+  text-align: center;
+
+  & > span {
+    font-size: 22px;
+    display: block;
+    color: #f5222d;
+    margin: 0 auto;
+    line-height: 22px;
+    margin-top: 5px;
+  }
+
+  & > img {
+    margin: 0 auto;
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+  }
+}
+
+.spinnerContainer > div {
+  align-items: center;
+  width: 100%;
+  margin: 200px auto;
+}

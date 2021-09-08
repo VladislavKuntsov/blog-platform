@@ -4,28 +4,25 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
 const PrivateRoute = ({ component: Component, isLogin, ...rest}) => (
-            <Route {...rest} render={props => (
-                isLogin ?
-                     <Component {...props} />
-                : <Redirect to="/sign-in" />
-            )}/>   
-        )
+    <Route {...rest} render={props => (
+        isLogin ?
+                <Component {...props} />
+        : <Redirect to="/sign-in" />
+    )}/>   
+)
 
 PrivateRoute.defaultProps = {
-    dataAuthorizationUser: {},
+    isLogin: {},
     component: () => {},
-}
 
-PrivateRoute.defaultProps = {
-    isLogin: {}
 }
 
 PrivateRoute.propTypes = {
     component: PropTypes.func,
-    dataAuthorizationUser: PropTypes.objectOf(PropTypes.object),
     isLogin: PropTypes.shape({
         username: PropTypes.string,
-    })
+    }),
+
 }
 
 const mapStateToProps = (state) => ({

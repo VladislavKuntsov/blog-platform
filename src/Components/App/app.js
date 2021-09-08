@@ -19,60 +19,57 @@ import Services from '../../Services/services';
 const realWorldDBService = new Services;
 
 
-const App = ({setArticles, setArticlesUser, setIsLoading, currentPage, isLogin, isLoading}) =>  {
+const App = ({setArticles, setIsLoading, currentPage, isLoading}) =>  {
+
+    const articleCountOffset = (currentPage - 1) * 20; // смещение колличества статей
 
     useEffect(() => {
-        realWorldDBService.getArticles(currentPage * 20 - 20).then(body => {
-            setArticles(body);
-            setIsLoading(false); 
-        })     
-    }, [setArticles, setArticlesUser, setIsLoading, currentPage, isLogin, isLoading]);
-
+        if(isLoading === true) {
+            realWorldDBService.getArticles(articleCountOffset).then(body => {
+                setArticles(body);
+                setIsLoading(false); 
+            })              
+        }
+   
+    }, [setArticles, setIsLoading, articleCountOffset, isLoading]);
 
     return (
         <div>
             <Router>
                 <Header/>
                 <Route path={["/", "/articles"]} exact component={ArticlesList} />
-                <Route path="/new-account" exact component={NewAccount} />
+                <Route path="/sign-up" exact component={NewAccount} />
                 <Route path="/sign-in" exact component={SignIn} />
                 <Route path="/articles/:slug" exact component={FullArticle} />
-                <PrivateRoute path="/edit-profile" exact component={EditProfile} />
+                <PrivateRoute path="/profile" exact component={EditProfile} />
                 <PrivateRoute path="/new-article" exact component={NewArticle} />
-                <PrivateRoute path="/new-article/:slug/edit" component={NewArticle} />
+                <PrivateRoute path="/articles/:slug/edit" component={NewArticle} />
             </Router>
         </div>
     )
 }
 
 App.defaultProps = {
-    isLogin: {},
 }
 
 App.propTypes = {
     isLoading: PropTypes.bool.isRequired,
     setIsLoading: PropTypes.func.isRequired,
     setArticles: PropTypes.func.isRequired,
-    setArticlesUser: PropTypes.func.isRequired,
     currentPage: PropTypes.number.isRequired,
-    isLogin: PropTypes.shape({
-        username: PropTypes.string,
-    }),
 }
 
 const mapStateToProps = (state) => ({
     currentPage: state.currentPage,
-    isLogin: state.isLogin,
     isLoading: state.isLoading,
 }) 
 
 const mapDispatchToProps = (dispatch) => {
-    const {setArticles, setIsLoading, setArticlesUser} = bindActionCreators(actions, dispatch);
+    const {setArticles, setIsLoading} = bindActionCreators(actions, dispatch);
 
     return {
         setIsLoading: (payload) => setIsLoading(payload),
         setArticles: (payload) => setArticles(payload),
-        setArticlesUser: (payload) => setArticlesUser(payload),
     }
 }
 

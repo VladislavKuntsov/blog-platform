@@ -1,7 +1,9 @@
-import React,  { useState } from 'react';
+import React,  { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
+import 'antd/dist/antd.css';
+import {Spin} from 'antd';
 import { connect } from 'react-redux';
-import { withRouter} from 'react-router-dom';
+import { withRouter, Redirect} from 'react-router-dom';
 import {bindActionCreators} from 'redux';
 import * as actions from '../../Store/actions';
 import ArticleItem from "../Article-item/article-item";
@@ -12,48 +14,66 @@ import Services from '../../Services/services';
 
 const realWorldDBService = new Services;
 
-const FullArticle = ({fullArticle, setIsLoading, history, setArticlesUser, isLogin}) => {
+const FullArticle = ({fullArticle, setIsLoading, history, setFullArticle, isLogin}) => {
+
+    const slug = history.location.pathname.replace("/articles/", "");
 
     const [modalActive, setModalActive] = useState(false);
+    const [isLoadingFullArticle, setIsLoadingFullArticle] = useState(true); 
+    const [redirect, setRedirect] = useState({articles: false, edit: false}); 
 
-    const updateArticle = () => {
-        realWorldDBService.getArticlesUser(isLogin.username).then(bodyy => {
-            setArticlesUser(bodyy);
-            setIsLoading(false);   
-        })
-    }
+    useEffect (() => {
+        if(isLoadingFullArticle) {
+            realWorldDBService.getFullArticle(slug).then( (article) => {
+                localStorage.setItem("fullArticle", JSON.stringify(article))
+                setFullArticle();
+                setIsLoadingFullArticle(false)
+            })    
+        }
+    }, [isLoadingFullArticle, setIsLoadingFullArticle, setFullArticle, slug])
 
     const onDelete = () => {
         setModalActive(false)
-        setIsLoading(true);
         realWorldDBService.deleteArticle(isLogin.token, fullArticle.article.slug).then( () => {
-            history.push(`/articles`);
-            updateArticle();
+            setIsLoading(true);
+            setRedirect({articles: true, edit: false})
         })  
     }
 
-    const button = isLogin && isLogin.username === fullArticle.article.author.username ? (
+    const onEdit = () => setRedirect({articles: false, edit: true})
+
+    const button = isLogin && !isLoadingFullArticle && isLogin.username === fullArticle.article.author.username ? (
         <div>
             <div className={classesFullArticle.button}>
                 <div onClick={() => setModalActive(true)} role="presentation"><span>Delete</span></div>
-                <div onClick={() => history.push(`/new-article/${fullArticle.article.slug}/edit`)}  role="presentation" ><span>Edit</span></div> 
+                <div onClick={() => onEdit()} role="presentation" ><span>Edit</span></div> 
             </div>  
         </div>  
     ) : null
 
+    if(redirect.articles) return <Redirect to="/articles"/>
+    if(redirect.edit) return <Redirect to={`/articles/${fullArticle.article.slug}/edit`}/>    
+
     return (
-        <div className={classesFullArticle["bl-full-article"]}>
-            <ArticleItem articleData={fullArticle.article} body={fullArticle.article.body} button={button}/>
-                <Modal className={classesFullArticle.modal} active={modalActive} setActive={setModalActive}>
-                    <p className={classesFullArticle["modal-warning-text"]}>Are you sure to delete this article?</p>
-                    <div className={classesFullArticle["modal-button"]}>
-                        <div onClick={() => setModalActive(false)} role="presentation"><span>No</span></div>
-                        <div onClick={() => {
-                            onDelete();
-                        }} role="presentation"><span>Yes</span></div>                    
-                    </div>    
-                </Modal>     
-        </div>
+        !isLoadingFullArticle ?
+        <>
+            <div className={classesFullArticle["bl-full-article"]}>
+                <ArticleItem articleData={fullArticle.article} body={fullArticle.article.body} button={button}/>
+                    <Modal className={classesFullArticle.modal} active={modalActive} setActive={setModalActive}>
+                        <p className={classesFullArticle["modal-warning-text"]}>Are you sure to delete this article?</p>
+                        <div className={classesFullArticle["modal-button"]}>
+                            <div onClick={() => setModalActive(false)} role="presentation"><span>No</span></div>
+                            <div onClick={() => onDelete()} role="presentation"><span>Yes</span></div>                    
+                        </div>    
+                    </Modal>     
+            </div>        
+        </>
+        :
+        <>
+        <div className ={classesFullArticle.spinnerContainer}>
+            <Spin size="large" />   
+        </div>           
+        </>
     )
 }
 
@@ -74,19 +94,19 @@ FullArticle.propTypes = {
         }).isRequired,
     }),
     setIsLoading: PropTypes.func.isRequired,
+    setFullArticle: PropTypes.func.isRequired,
     history: PropTypes.shape({
-    length: PropTypes.number.isRequired,
-    push: PropTypes.objectOf.isRequired,
-    location: PropTypes.shape({
-        pathname: PropTypes.string
+        length: PropTypes.number.isRequired,
+        push: PropTypes.objectOf.isRequired,
+        location: PropTypes.shape({
+            pathname: PropTypes.string
         })
     }),
-    setArticlesUser: PropTypes.func.isRequired,
     isLogin: PropTypes.shape({
         username: PropTypes.string,
         image: PropTypes.string,
         token: PropTypes.string,
-    })
+    }),
 }
 
 const mapStateProps = (state) => ({
@@ -95,12 +115,12 @@ const mapStateProps = (state) => ({
 })
 
 const mapDispatchToProps = (dispatch) => {
-    const {setArticles, setIsLoading, setArticlesUser} = bindActionCreators(actions, dispatch);
+    const {setArticles, setIsLoading, setFullArticle} = bindActionCreators(actions, dispatch);
 
     return {
         setArticles: (payload) => setArticles(payload),
         setIsLoading: payload => setIsLoading(payload),
-        setArticlesUser: payload => setArticlesUser(payload),
+        setFullArticle: () => setFullArticle(),
     }
 }
 

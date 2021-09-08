@@ -131,3 +131,32 @@
     }
   }
 }
+
+.errorInvalidData {
+  display: flex;
+  flex-direction: column;
+  margin: 0 32px 21px 32px;
+  text-align: center;
+
+  & > span {
+    font-size: 22px;
+    display: block;
+    color: #f5222d;
+    margin: 0 auto;
+    line-height: 22px;
+    margin-top: 5px;
+  }
+
+  & > img {
+    margin: 0 auto;
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+  }
+}
+
+.spinnerContainer > div {
+  align-items: center;
+  width: 100%;
+  margin: 200px auto;
+}

@@ -28,29 +28,37 @@ export default class realWorldDBService extends Component {
     return this.getResourse(`${this.API_BASE}articles/${slug}`);
   }
 
+
+
+
+
+
   async postResourse(url, options) {
+
     const response = await fetch(url, options);
 
-    if (!response.ok) {
-      return new Error(`Could not fetch ${url} received ${response.status}`);
+ /*    if (!response.ok) {
+      return {error: response.status};
     }
-
+ */
     const body = await response.json();
 
     return body;
   }
 
+
   postNewAccoun(userData) {
     return this.postResourse(`${this.API_BASE}users`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json;charset=utf-8',
-        },
-        body: JSON.stringify(userData),
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json;charset=utf-8',
+      },
+      body: JSON.stringify(userData),
     });
   }
 
-  postAuthentication(userData) {
+
+  postAuthentication(userData){
     return this.postResourse(`${this.API_BASE}users/login`, {
       method: 'POST',
       headers: {
