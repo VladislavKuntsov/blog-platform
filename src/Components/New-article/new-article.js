@@ -14,13 +14,13 @@ import Services from '../../Services/services';
 
 const realWorldDBService = new Services;
 
-const NewArticle = ({fullArticle,  history, setIsLoading, isLogin}) => {
-
+const NewArticle = ({fullArticle, match, setIsLoading, isLogin}) => {
+    
     const [redirect, setRedirect] = useState(false); // redirect
 
     const {register, handleSubmit, formState: { errors }} = useForm();
 
-    const urlPathname = history.location.pathname.indexOf("/edit") > 0; // определяем .../edit или .../new-article
+    const urlPathname = match.url.indexOf("/edit") > 0; // определяем .../edit или .../new-article
 
     const arrTagsList = urlPathname ? fullArticle.article.tagList.map((item) => {
         const obj = {id: nanoid(3), tag: item}
@@ -29,6 +29,12 @@ const NewArticle = ({fullArticle,  history, setIsLoading, isLogin}) => {
 
     const [arrayTags, setArrayTags] = useState( !urlPathname ? [{id: nanoid(3), tag: ""}] : arrTagsList)
     const [isLoadingNewArticle, setIsLoadingNewArticle] = useState(false); // отвечает за загрузку данных
+
+    const update = () => {
+        setIsLoadingNewArticle(false)
+        setIsLoading(true)
+        setRedirect(true)
+    }
 
     const onDeletedTag = (id) => {
         const newArr = arrayTags.filter((item) => item.id !== id);
@@ -88,19 +94,13 @@ const NewArticle = ({fullArticle,  history, setIsLoading, isLogin}) => {
 
         if(urlPathname) {
             realWorldDBService.updateArticle(token, userDataNewArticle, fullArticle.article.slug).then(() => {
-                setIsLoadingNewArticle(false)
-                setIsLoading(true)
-                setRedirect(true)
+                update();
             });
-        } 
-        
-        if(!urlPathname) {
-            realWorldDBService.postNewArticles(userDataNewArticle, token).then(() => {
-                setIsLoadingNewArticle(false)
-                setIsLoading(true)
-                setRedirect(true)
+        } else {
+                realWorldDBService.postNewArticles(userDataNewArticle, token).then(() => {
+                update();
             });
-        } 
+        }
     }
 
     if(redirect) return <Redirect to="/articles"/>;
@@ -110,7 +110,7 @@ const NewArticle = ({fullArticle,  history, setIsLoading, isLogin}) => {
         !isLoadingNewArticle ?
         <>
             <div className={classesNewArticle["bl-new-article"]}>                                                                  
-                <h2 className={classesNewArticle.title}>Create new article</h2>
+                <h2 className={classesNewArticle.title}>{urlPathname ? "Edit article" : "Create new article"}</h2>
                 <form 
                     className={classesNewArticle.form}
                     onSubmit={handleSubmit(data => onNewArticle(data))}
@@ -210,6 +210,9 @@ NewArticle.propTypes = {
         articlesCount: PropTypes.number
     }),
     isLoading: PropTypes.bool.isRequired,
+    match: PropTypes.shape({
+        url: PropTypes.string.isRequired
+    }).isRequired,
 }
 
 const mapStateToProps = (state) => ({

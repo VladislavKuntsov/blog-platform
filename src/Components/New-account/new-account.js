@@ -1,4 +1,3 @@
-
 import React, {useState} from 'react';
 import PropTypes from 'prop-types';
 import 'antd/dist/antd.css';
@@ -18,7 +17,6 @@ const NewAccount = ({setIsLogin}) => {
 
     const [errorEmailIsTaken, setErrorEmailIsTaken] = useState(false) // почта занята
     const [errorUsernameIsTaken, setErrorUsernameIsTaken] = useState(false) // имя занято
-    const [errorEmailAndUsernameAreBusy, setErrorEmailAndUsernameAreBusy] = useState(false) // Почта и имя уже занято
     const [isLoadingNewAccount, setIsLoadingNewAccount] = useState(false); // отвечает за загрузку данных этого компонента
     const [redirect, setRedirect] = useState(false); // redirect
 
@@ -28,7 +26,6 @@ const NewAccount = ({setIsLogin}) => {
     const onNewAccount = (userData) => { // обрабатываем форму и отправляем запрос
 
         setIsLoadingNewAccount(true);
-        setErrorEmailAndUsernameAreBusy(false);
         setErrorEmailIsTaken(false);
         setErrorUsernameIsTaken(false);            
 
@@ -41,9 +38,8 @@ const NewAccount = ({setIsLogin}) => {
         realWorldDBService.postNewAccoun(userDataRegistration).then( (body) => {
 
             if(body.errors) {
-                if(body.errors.email && body.errors.username) setErrorEmailAndUsernameAreBusy(true);  
-                if(body.errors.email && !body.errors.username) setErrorEmailIsTaken(true);
-                if(body.errors.username && !body.errors.email) setErrorUsernameIsTaken(true);  
+                if(body.errors.email) setErrorEmailIsTaken(true);
+                if(body.errors.username) setErrorUsernameIsTaken(true);  
                 setIsLoadingNewAccount(false);              
             }            
 
@@ -60,26 +56,13 @@ const NewAccount = ({setIsLogin}) => {
         });
     }
 
-    const errorEmail = errorEmailIsTaken ? (
+    const errorEmailUsername = errorEmailIsTaken || errorUsernameIsTaken ? (
         <div className={classesNewAccount.errorInvalidData}>
             <img src="https://image.flaticon.com/icons/png/128/258/258393.png" alt='logo User' />
-            <span>A user with such mail is already registered in the system</span>
+            <span>Has already been taken</span>
             </div> 
     ) : null
     
-    const errorUsername = errorUsernameIsTaken ? (
-        <div className={classesNewAccount.errorInvalidData}>
-            <img src="https://image.flaticon.com/icons/png/128/258/258393.png" alt='logo User' />
-            <span>A user with this name is already registered in the system</span>
-            </div> 
-    ) : null
-
-    const errorEmailAndUsername = errorEmailAndUsernameAreBusy ? (
-        <div className={classesNewAccount.errorInvalidData}>
-            <img src="https://image.flaticon.com/icons/png/128/258/258393.png" alt='logo User' />
-            <span>A user with the same name and mail is already registered in the system</span>
-            </div> 
-    ) : null
 
     if(redirect) return <Redirect to="/articles"/>
 
@@ -88,9 +71,7 @@ const NewAccount = ({setIsLogin}) => {
         <>
             <div className={classesNewAccount["bl-new-account"]}>
                 <h2 className={classesNewAccount.title}>Create new account</h2>
-                {errorEmail}
-                {errorUsername}
-                {errorEmailAndUsername}
+                {errorEmailUsername}
                 <form 
                     className={classesNewAccount.form} 
                     onSubmit={handleSubmit((data) => onNewAccount(data))}
@@ -98,7 +79,7 @@ const NewAccount = ({setIsLogin}) => {
                     <label className={classesNewAccount["input-field"]}>
                         <div>Username</div>
                         <input 
-                            className={errors.username || errorUsernameIsTaken || errorEmailAndUsernameAreBusy ? classesNewAccount["warning-border"] : null} 
+                            className={errors.username || errorUsernameIsTaken ? classesNewAccount["warning-border"] : null} 
                             type="text" 
                             placeholder="Username" 
                             {...register("username", {
@@ -112,7 +93,7 @@ const NewAccount = ({setIsLogin}) => {
                     <label className={classesNewAccount["input-field"]}>
                         <div>Email address</div>
                         <input 
-                            className={errors.email || errorEmailIsTaken || errorEmailAndUsernameAreBusy ? classesNewAccount["warning-border"] : null} 
+                            className={errors.email || errorEmailIsTaken ? classesNewAccount["warning-border"] : null} 
                             type="email" 
                             placeholder="Email address"
                             {...register("email", {

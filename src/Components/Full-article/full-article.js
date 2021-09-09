@@ -14,9 +14,9 @@ import Services from '../../Services/services';
 
 const realWorldDBService = new Services;
 
-const FullArticle = ({fullArticle, setIsLoading, history, setFullArticle, isLogin}) => {
+const FullArticle = ({fullArticle, setIsLoading, match, setFullArticle, isLogin}) => {
 
-    const slug = history.location.pathname.replace("/articles/", "");
+    const articleSlug = match.params.slug;
 
     const [modalActive, setModalActive] = useState(false);
     const [isLoadingFullArticle, setIsLoadingFullArticle] = useState(true); 
@@ -24,13 +24,13 @@ const FullArticle = ({fullArticle, setIsLoading, history, setFullArticle, isLogi
 
     useEffect (() => {
         if(isLoadingFullArticle) {
-            realWorldDBService.getFullArticle(slug).then( (article) => {
+            realWorldDBService.getFullArticle(articleSlug).then( (article) => {
                 localStorage.setItem("fullArticle", JSON.stringify(article))
                 setFullArticle();
                 setIsLoadingFullArticle(false)
             })    
         }
-    }, [isLoadingFullArticle, setIsLoadingFullArticle, setFullArticle, slug])
+    }, [isLoadingFullArticle, setIsLoadingFullArticle, setFullArticle, articleSlug])
 
     const onDelete = () => {
         setModalActive(false)
@@ -79,7 +79,6 @@ const FullArticle = ({fullArticle, setIsLoading, history, setFullArticle, isLogi
 
 FullArticle.defaultProps = {
     fullArticle: {},
-    history: {},
     isLogin: {},
 }
 
@@ -95,18 +94,16 @@ FullArticle.propTypes = {
     }),
     setIsLoading: PropTypes.func.isRequired,
     setFullArticle: PropTypes.func.isRequired,
-    history: PropTypes.shape({
-        length: PropTypes.number.isRequired,
-        push: PropTypes.objectOf.isRequired,
-        location: PropTypes.shape({
-            pathname: PropTypes.string
-        })
-    }),
     isLogin: PropTypes.shape({
         username: PropTypes.string,
         image: PropTypes.string,
         token: PropTypes.string,
     }),
+    match: PropTypes.shape({
+        params: PropTypes.shape({
+            slug: PropTypes.string.isRequired,
+        })
+    }).isRequired,
 }
 
 const mapStateProps = (state) => ({

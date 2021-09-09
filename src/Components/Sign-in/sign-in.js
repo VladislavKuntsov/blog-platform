@@ -45,7 +45,7 @@ const SignIn = ({setIsLogin}) => {
 
         <div className={classesSignIn.errorInvalidPassword}>
             <img src="https://image.flaticon.com/icons/png/128/258/258393.png" alt='logo User' />
-            <span>Wrong login or password</span>
+            <span>Is invalid</span>
             </div> 
     ) : null
 
